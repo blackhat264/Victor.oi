@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kali Linux Terminal</title>
+
+<style>
+    body {
+        background: #0c162d;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        font-family: monospace;
+        color: #00e6e6;
+        overflow: hidden;
+    }
+
+    #terminal {
+        padding: 20px;
+        box-sizing: border-box;
+        font-size: 17px;
+        white-space: pre-wrap;
+        line-height: 1.4;
+    }
+
+    .prompt-user { color: #6af7ff; }
+    .prompt-host { color: #55ff55; }
+    .cursor {
+        display: inline-block;
+        width: 10px;
+        height: 17px;
+        background: #00ffff;
+        margin-left: 5px;
+        animation: blink 0.6s infinite;
+    }
+
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+    }
+</style>
+</head>
+
+<body>
+<div id="terminal"></div>
+
+<script>
+const terminal = document.getElementById("terminal");
+
+const lines = [
+    "kali@phishing-lab:~$ sudo service antiphishing start",
+    "[ OK ] Servicio Anti-Phishing activado.",
+    "",
+    "kali@phishing-lab:~$ scanning --url-protection --email-filter --deep-mode",
+    "[+] Iniciando análisis...",
+    "[+] Cargando módulo: detector de URLs falsas...",
+    "[+] Cargando módulo: verificador de certificados SSL...",
+    "[+] Cargando módulo: analizador de encabezados...",
+    "",
+    "[!] Advertencia: se detectaron patrones sospechosos.",
+    "",
+    "kali@phishing-lab:~/scan$ Introduce un enlace sospechoso para analizar:",
+    ">"
+];
+
+let currentLine = 0;
+let charIndex = 0;
+
+function typeLine() {
+    if (currentLine >= lines.length) {
+        terminal.innerHTML += '<span class="cursor"></span>';
+        return;
+    }
+
+    let line = lines[currentLine];
+
+    if (charIndex < line.length) {
+        terminal.innerHTML += line.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeLine, 15);
+    } else {
+        terminal.innerHTML += "\n";
+        charIndex = 0;
+        currentLine++;
+        setTimeout(typeLine, 200);
+    }
+
+    terminal.scrollTop = terminal.scrollHeight;
+}
+
+typeLine();
+</script>
+
+</body>
+</html>
