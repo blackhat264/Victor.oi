@@ -3,68 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phishing - Modo Hacker</title>
+<title>Kali Linux Terminal</title>
 
 <style>
     body {
-        background-color: #000;
-        color: #0f0;
-        font-family: "Courier New", monospace;
+        background: #0c162d;
         margin: 0;
         padding: 0;
+        height: 100vh;
+        font-family: monospace;
+        color: #00e6e6;
+        overflow: hidden;
     }
 
-    header {
-        text-align: center;
-        padding: 30px 0;
-        font-size: 28px;
-        text-shadow: 0 0 10px #0f0;
-        animation: glitch 1.5s infinite;
-    }
-
-    @keyframes glitch {
-        0% { text-shadow: 2px 2px #0f0; }
-        20% { text-shadow: -2px -2px #0f0; }
-        40% { text-shadow: 2px -2px #0f0; }
-        60% { text-shadow: -2px 2px #0f0; }
-        80% { text-shadow: 0px 0px #0f0; }
-        100% { text-shadow: 2px -2px #0f0; }
-    }
-
-    .terminal {
-        max-width: 900px;
-        margin: 20px auto;
-        border: 1px solid #0f0;
+    #terminal {
         padding: 20px;
-        border-radius: 4px;
-        background: rgba(0, 20, 0, 0.5);
-        box-shadow: 0 0 20px #0f0;
+        box-sizing: border-box;
+        font-size: 17px;
+        white-space: pre-wrap;
+        line-height: 1.4;
     }
 
-    h2 {
-        text-shadow: 0 0 8px #0f0;
-    }
-
-    ul {
-        list-style: none;
-        padding-left: 15px;
-    }
-
-    ul li::before {
-        content: ">> ";
-        color: #04ff04;
-    }
-
-    .alerta {
-        border-left: 3px solid #0f0;
-        padding: 10px;
-        margin: 10px 0;
-        background: rgba(0, 255, 0, 0.05);
-    }
-
-    .cursor::after {
-        content: "_";
-        animation: blink 0.9s infinite;
+    .prompt-user { color: #6af7ff; }
+    .prompt-host { color: #55ff55; }
+    .cursor {
+        display: inline-block;
+        width: 10px;
+        height: 17px;
+        background: #00ffff;
+        margin-left: 5px;
+        animation: blink 0.6s infinite;
     }
 
     @keyframes blink {
@@ -75,42 +43,54 @@
 </head>
 
 <body>
-<header>⚠️ Sistema Antiphishing v1.3 // Modo Hacker Activado ⚠️</header>
+<div id="terminal"></div>
 
-<div class="terminal">
-    <h2>> ¿QUÉ ES EL PHISHING?</h2>
-    <p class="cursor">
-        El phishing es un ataque diseñado para robar contraseñas y datos sensibles,
-        usando mensajes falsos que parecen reales. Objetivo: engañar al usuario.
-    </p>
-</div>
+<script>
+const terminal = document.getElementById("terminal");
 
-<div class="terminal">
-    <h2>> FORMAS COMUNES DE ATAQUE</h2>
-    <ul>
-        <li>Correos falsos que imitan bancos o tiendas.</li>
-        <li>Links manipulados para llevarte a sitios clonados.</li>
-        <li>Mensajes SMS con “urgencia” o “verificación”.</li>
-        <li>Páginas falsas con inicios de sesión fraudulentos.</li>
-    </ul>
-</div>
+const lines = [
+    "kali@phishing-lab:~$ sudo service antiphishing start",
+    "[ OK ] Servicio Anti-Phishing activado.",
+    "",
+    "kali@phishing-lab:~$ scanning --url-protection --email-filter --deep-mode",
+    "[+] Iniciando análisis...",
+    "[+] Cargando módulo: detector de URLs falsas...",
+    "[+] Cargando módulo: verificador de certificados SSL...",
+    "[+] Cargando módulo: analizador de encabezados...",
+    "",
+    "[!] Advertencia: se detectaron patrones sospechosos.",
+    "",
+    "kali@phishing-lab:~/scan$ Introduce un enlace sospechoso para analizar:",
+    ">"
+];
 
-<div class="terminal">
-    <h2>> CÓMO PROTEGERTE</h2>
+let currentLine = 0;
+let charIndex = 0;
 
-    <div class="alerta">[!] Nunca abras enlaces sospechosos.</div>
-    <div class="alerta">[!] Verifica la URL antes de escribir tus datos.</div>
-    <div class="alerta">[!] Activa la verificación en dos pasos.</div>
-    <div class="alerta">[!] Usa contraseñas fuertes y únicas.</div>
-</div>
+function typeLine() {
+    if (currentLine >= lines.length) {
+        terminal.innerHTML += '<span class="cursor"></span>';
+        return;
+    }
 
-<div class="terminal">
-    <h2>> SI FUISTE VÍCTIMA...</h2>
-    <p>
-        Cambia tus contraseñas inmediato, contacta a tu banco y reporta el intento.
-        El tiempo de respuesta es crítico para reducir daños.
-    </p>
-</div>
+    let line = lines[currentLine];
+
+    if (charIndex < line.length) {
+        terminal.innerHTML += line.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeLine, 15);
+    } else {
+        terminal.innerHTML += "\n";
+        charIndex = 0;
+        currentLine++;
+        setTimeout(typeLine, 200);
+    }
+
+    terminal.scrollTop = terminal.scrollHeight;
+}
+
+typeLine();
+</script>
 
 </body>
 </html>
